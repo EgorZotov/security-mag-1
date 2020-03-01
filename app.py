@@ -29,9 +29,9 @@ class App(QtWidgets.QMainWindow, windows.Ui_MainWindow):
         if file_paths[0]:
             for file_path in file_paths[0]:
                 self.listWidget.addItem(os.path.relpath(file_path))
-        self.report.import_scan_results(file_paths[0])
-        self.pushButton_2.setEnabled(True)
-        self.pushButton_3.setEnabled(True)
+            self.report.import_scan_results(file_paths[0])
+            self.pushButton_2.setEnabled(True)
+            self.pushButton_3.setEnabled(True)
     
     def export_scan(self):
        save_path = QtWidgets.QFileDialog.getSaveFileName(self)
