@@ -20,12 +20,9 @@ class Report:
 
                 for row in readCSV:
                     file_name = basename(source.name).split(".")[0]
-                    # print("FILE", file_name)
                     user_row = row
-                    # print("Print rows", row)
                     user_row = {'UserID': file_name,
                                 'ID': row[0], 'FileName': row[1], 'FileSize': row[2], 'IsVirus': row[3]}
-                    # print("USER ROW", user_row)
                     self.scan_result.append(user_row)
         self.calculate_report()
             
@@ -77,33 +74,24 @@ class Report:
 
             # Инициализация полей
             if scan["ID"] not in self.total_report:
-                   self.total_report[scan["ID"]] = {}
-            if "UserCount" not in self.total_report[scan["ID"]]:
-                self.total_report[scan["ID"]]["UserCount"] = 0
-            if "UserVirusCount" not in self.total_report[scan["ID"]]:
-                self.total_report[scan["ID"]]["UserVirusCount"] = 0
-            if "VirusCount" not in self.total_report[scan["ID"]]:
-                    self.total_report[scan["ID"]]["VirusCount"] = 0
-            if "FileCount" not in self.total_report[scan["ID"]]:
-                self.total_report[scan["ID"]]["FileCount"] = 0
+                self.total_report[scan["ID"]] = {
+                    'UserCount': 0,
+                    'UserVirusCount': 0,
+                    'FileCount': 0,
+                    'VirusCount': 0,
+                }
 
-            # if not any([user_file["ID"] == scan["ID"] for user_file in users_files[scan["UserID"]]]):
             if scan["ID"] not in users_files[scan["UserID"]]:
-                # file_info = {'ID': scan["ID"], 'infected': False}
-                # users_files[scan["UserID"]].append(scan["ID"])
                 users_files[scan["UserID"]][scan["ID"]] = {'infected': False }    
                 self.total_report[scan["ID"]]["UserCount"] += 1
                 if int(scan["IsVirus"]):
                     self.total_report[scan["ID"]]["UserVirusCount"] += 1
-                    # file_info["infected"] = True
                     users_files[scan["UserID"]][scan["ID"]]['infected'] = True
-                # users_files[scan["UserID"]].append(file_info)    
                 
             self.total_report[scan["ID"]]["FileCount"] += 1
             if int(scan["IsVirus"]):
                 self.total_report[scan["ID"]]["VirusCount"] += 1
                 if scan["ID"] in users_files[scan["UserID"]] and not users_files[scan["UserID"]][scan["ID"]]["infected"]:
-                # if any([user_file["ID"] == scan["ID"] and not user_file["infected"] for user_file in users_files[scan["UserID"]]]):
                     users_files[scan["UserID"]][scan["ID"]] = {'infected': True}
                     self.total_report[scan["ID"]]["UserVirusCount"] += 1
 
